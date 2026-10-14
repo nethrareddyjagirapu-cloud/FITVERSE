@@ -1,0 +1,47 @@
+server:
+  port: ${PORT:8080}
+  error:
+    include-message: always
+    include-binding-errors: always
+
+spring:
+  application:
+    name: fitverse-backend
+
+  datasource:
+    url: ${DB_URL:jdbc:h2:file:./data/fitverse_db;DB_CLOSE_DELAY=-1;MODE=MySQL;AUTO_SERVER=TRUE}
+    username: ${DB_USERNAME:sa}
+    password: ${DB_PASSWORD:}
+    driver-class-name: ${DB_DRIVER:org.h2.Driver}
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+
+fitverse:
+  jwt:
+    secret: ${JWT_SECRET:FitverseSuperSecretKeyForJwtTokenGenerationMinimum256BitsLong2026!}
+    expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000,http://127.0.0.1:3000}
+  ai:
+    gemini-api-key: ${GEMINI_API_KEY:}
+
+# Swagger & Actuator
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui/index.html
+    tags-sorter: alpha
+    operations-sorter: method
