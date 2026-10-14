@@ -9,10 +9,15 @@ import {
   ProgressMeasurement,
 } from '../types';
 
-export const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  import.meta.env.VITE_API_URL ||
+const rawApiUrl =
+  (import.meta.env.VITE_API_BASE_URL as string | undefined)?.trim() ||
+  (import.meta.env.VITE_API_URL as string | undefined)?.trim() ||
   'http://localhost:8080/api';
+
+const sanitizedApiUrl = rawApiUrl.replace(/\/+$/, '');
+export const API_BASE_URL = sanitizedApiUrl.endsWith('/api')
+  ? sanitizedApiUrl
+  : `${sanitizedApiUrl}/api`;
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
